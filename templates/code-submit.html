@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Code Submit{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">Code Analysis</h2>
+        
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('history') }}" class="btn btn-dark shadow-sm">
+                <i class="bi bi-clock-history"></i> History
+            </a>
+            <button class="btn btn-danger shadow-sm" onclick="logout()">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="codeInput" class="form-label">Code:</label>
+        <textarea class="form-control" id="codeInput" rows="10" placeholder="Paste your code here..."></textarea>
+    </div>
+    
+    <div class="col-12">
+        <button class="btn btn-primary" id="submitButton" onclick="submitCode()">Submit Analysis</button>
+    </div>
+
+    <div class="mt-4">
+        <h2>Response:</h2>
+            <pre id="resultBox" class="p-3 border bg-light" style="min-height: 100px;"></pre>
+            <div class="mt-4" id="analysisResult" style="display: none;">
+                <h2 class="mb-3">Analysis Results</h2>
+
+                <div class="card border-primary mb-3">
+                    <div class="card-header bg-primary text-white fw-bold">Summary</div>
+                    <div class="card-body">
+                        <p id="summaryCode" class="mb-0"></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="text-secondary">Logic Breakdown</h5>
+                    <ol id="logicList" class="ps-4"></ol>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-danger small fw-bold text-uppercase">Potential Issues</h5>
+                        <ul id="issuesList" class="list-group list-group-flush mb-3"></ul>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="text-success small fw-bold text-uppercase">Suggested Improvements</h5>
+                        <ul id="improvementsList" class="list-group list-group-flush mb-3"></ul>
+                    </div>
+                </div>
+                <div class="BigO">
+                    <button type="button" id="bigoButton" data-bs-toggle="modal" data-bs-target="#complexityModal" class="btn btn-primary mb-2">Show Big-O</button>
+                    <div class="modal fade" id="complexityModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered"> <div class="modal-content">
+                                
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalTitle">Performance Details</h5>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Time Complexity: <span id="timeDisplay" class="fw-bold"></span></p>
+                                    <div id="timeExplanation" class="small text-muted border-start ps-3 py-1"></div>
+                                    <hr>
+                                    <p>Space Complexity: <span id="spaceDisplay" class="fw-bold"></span></p>
+                                    <div id="spaceExplanation" class="small text-muted border-start ps-3 py-1"></div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "/login";
+        }
+    });
+</script>
+{% endblock %}
